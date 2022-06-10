@@ -12,7 +12,7 @@ The app features a Create, Read, Update and delete data functions to and from Fi
 - Add your own GoogleService-Info.plist to the target 
 - Set up Firebase Firestore to receive data 
 - Run the Application 
-- (SPM should add fetch the packages itself).
+- (SPM should fetch the packages itself).
 
 
 ### Screenshots of the Application:
