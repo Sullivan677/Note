@@ -10,10 +10,11 @@ import SwiftUI
 struct ContentView: View {
     
     @ObservedObject private var viewModel = NoteViewModel()
-    @State private var showingSheet = false
+    @State private var presentAlert = false
+    @State private var titleText: String = ""
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 ForEach(viewModel.notes, id:\.id) { Note in
                     NavigationLink(destination: DetailsView(note: Note)) {
@@ -26,20 +27,33 @@ struct ContentView: View {
                 .navigationTitle("Notes")
         }.accentColor(.yellow)
             .toolbar {
-                ToolbarItemGroup(placement: .bottomBar) {
+                ToolbarItem(placement: .bottomBar) {
                     Text("\(viewModel.notes.count) notes")
-                Spacer()
-                Button {
-                    showingSheet.toggle()
-                } label: {
-                    Image(systemName: "square.and.pencil")
-                }.foregroundColor(.yellow)
-                 .font(.system(size: 22, weight: .medium))
-                 .sheet(isPresented: $showingSheet) {
-                    FormView()
+                }
+                ToolbarItem(placement: .bottomBar) {
+                    Button {
+                        presentAlert = true
+                    } label: {
+                        Image(systemName: "square.and.pencil")
+                            .imageScale(.large)
+                            .bold()
+                            .accentColor(.yellow)
+                    }.alert("Note", isPresented: $presentAlert, actions: {
+                        TextField("Enter your text", text: $titleText)
+                        Button("Save", action: {
+                            // post the text to Firestore, then erase the text:
+                            self.viewModel.addData(title: titleText)
+                            titleText = ""
+                        })
+                        Button("Cancel", role: .cancel, action: {
+                            presentAlert = false
+                            titleText = ""
+                        })
+                    }, message: {
+                        Text("Please, write your note")
+                    })
                 }
             }
-        }
     }
 }
 

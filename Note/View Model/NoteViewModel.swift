@@ -12,8 +12,8 @@ import SwiftUI
 class NoteViewModel: ObservableObject {
     
     @Published var notes = [Note]() // Reference to our Model
-    private var databaseReference = Firestore.firestore().collection("Notes") // reference to our collection
-
+    private var databaseReference = Firestore.firestore().collection("Notes") // reference to our Firestore's collection
+    
     // function to post data
     func addData(title: String) {
         do {
@@ -62,7 +62,5 @@ class NoteViewModel: ObservableObject {
             }
         }
     }
-    
-    // Post images to Firebase Storage
     
 }
